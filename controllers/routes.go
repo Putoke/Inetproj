@@ -15,9 +15,9 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
-		"Index",
+		"exercises",
 		"GET",
-		"/json/exercises",
-		Index,
+		"/exercises/{id}",
+		Exercises,
 	},
 }
