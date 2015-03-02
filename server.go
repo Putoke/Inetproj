@@ -5,16 +5,15 @@ import (
 	"Inetproj/models"
 	"log"
 	"net/http"
-    "os"
+	"os"
 )
 
 func main() {
 	router := controllers.NewRouter()
-    models.InitDB()
+	models.InitDB()
 	log.Println("Server started")
-    router.HandleFunc("/kill", func(w http.ResponseWriter, r * http.Request) {os.Exit(0)})
+	router.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) { os.Exit(0) })
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 	models.CloseDB()
 }
-
