@@ -13,11 +13,25 @@ type Route struct {
 
 type Routes []Route
 
-var routes = Routes{
-	Route{
+var routes = Routes {
+	Route {
 		"exercises",
 		"GET",
 		"/exercises/{id}",
 		Exercises,
 	},
+
+    Route {
+        "workouts",
+        "GET",
+        "/workouts/{id}",
+        Workouts,
+    },
+
+    Route {
+        "schedules",
+        "GET",
+        "/schedules/{id}",
+        Schedules,
+    },
 }
