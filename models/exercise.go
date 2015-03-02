@@ -10,9 +10,11 @@ type Exercise struct {
 	Musclegroup string `json:"musclegroup"`
 }
 
+const GetExercisesQuery = "SELECT name, musclegroup FROM exercises WHERE userid = ?"
+
 func GetExercises(id string) []*Exercise {
 
-	stmt, err := db.Prepare("SELECT name, musclegroup FROM exercises WHERE userid = ?")
+	stmt, err := db.Prepare(GetExercisesQuery)
 	if err != nil {
 		log.Fatal(err)
 	}
