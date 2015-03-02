@@ -18,7 +18,7 @@ var routes = Routes{
 	Route{
 		"Index",
 		"GET",
-		"/json/trades",
+		"/json/exercises",
 		models.Index,
 	},
 }
