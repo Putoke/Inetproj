@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"Inetproj/models"
 	"net/http"
 )
 
@@ -19,6 +18,6 @@ var routes = Routes{
 		"Index",
 		"GET",
 		"/json/exercises",
-		models.Index,
+		Index,
 	},
 }

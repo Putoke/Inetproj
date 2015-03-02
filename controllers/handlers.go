@@ -1,11 +1,12 @@
-package models
+package controllers
 
 import (
 	"encoding/json"
 	"net/http"
+    "Inetproj/models"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	exercises := GetExercises("0")
+	exercises := models.GetExercises("0")
 	json.NewEncoder(w).Encode(exercises)
 }
