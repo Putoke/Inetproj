@@ -20,16 +20,16 @@ create table exercises(
 	name varchar(255) NOT NULL,
 	musclegroup varchar(255),
 	FOREIGN KEY (userid) REFERENCES users(id),
-	UNIQUE(name)
+	UNIQUE KEY name (userid, name)
 );
 
 create table schedules(
 	userid int NOT NULL,
-	name varchar(255) NOT NULL,
+	name varchar(255),
 	workout varchar(255) NOT NULL,
 	day varchar(255) NOT NULL,
 	FOREIGN KEY (userid) REFERENCES users(id),
-	UNIQUE(name)
+	FOREIGN KEY (workout) REFERENCES workouts(name)
 );
 
 create table workouts(
@@ -40,5 +40,5 @@ create table workouts(
 	reps int,
 	FOREIGN KEY (userid) REFERENCES users(id),
 	FOREIGN KEY (exercise) REFERENCES exercises(name),
-	UNIQUE(name)
+	UNIQUE KEY name (userid, name, exercise)
 );
