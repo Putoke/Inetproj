@@ -1,18 +1,16 @@
 package main
+
 import (
-    "Inetproj/controllers"
-    "log"
-    "net/http"
-    "Inetproj/models"
-    "github.com/goji/httpauth"
+	"Inetproj/controllers"
+	"Inetproj/models"
+	"log"
+	"net/http"
 )
 
 func main() {
-    router := controllers.NewRouter()
-    models.InitDB()
+	router := controllers.NewRouter()
+	models.InitDB()
 
-    http.Handle("/", httpauth.SimpleBasicAuth("test", "korv")(router))
-
-    log.Fatal(http.ListenAndServe(":8000", nil))
-    models.CloseDB()
+	log.Fatal(http.ListenAndServe(":8000", router))
+	models.CloseDB()
 }
