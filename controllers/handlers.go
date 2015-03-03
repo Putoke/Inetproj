@@ -35,6 +35,9 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	lastname := vars["lastname"]
 	email := vars["email"]
 	password := vars["password"]
-	models.RegisterUser(name, lastname, email, password)
-	log.Println("New user registered (" + name + ", " + lastname + ")")
+	success := models.RegisterUser(name, lastname, email, password)
+	if success {
+		log.Println("New user registered (" + name + ", " + lastname + ")")
+		w.Write([]byte("User registered"))
+	}
 }

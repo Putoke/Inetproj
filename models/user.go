@@ -14,7 +14,7 @@ type User struct {
 
 const RegisterUserQuery = "INSERT INTO users (name, lastname, email, password) values (?, ?, ?, ?);"
 
-func RegisterUser(name, lastname, email, password string) {
+func RegisterUser(name, lastname, email, password string) bool {
 
 	stmt, err := db.Prepare(RegisterUserQuery)
 	if err != nil {
@@ -25,4 +25,6 @@ func RegisterUser(name, lastname, email, password string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	return err == nil
 }

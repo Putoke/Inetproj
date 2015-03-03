@@ -1,9 +1,11 @@
+ADMIN := $(shell cat database/adminuser)
+ADMINPW := $(shell cat database/adminpassword)
+
 all:
 	go run server.go
 	
 rebuilddb:
-	mysql --host=mysql-vt2015.csc.kth.se --user=jedluadmin --password=mel4Q8mc < database/createtables.sql
-	mysql --host=mysql-vt2015.csc.kth.se --user=jedluadmin --password=mel4Q8mc < database/defaultvalues.sql
+	cat database/*.sql | mysql --host=mysql-vt2015.csc.kth.se --user=$(ADMIN) --password=$(ADMINPW)
 
 setupgo:
 	go get github.com/go-sql-driver/mysql
