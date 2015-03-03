@@ -28,3 +28,13 @@ func Schedules(w http.ResponseWriter, r *http.Request) {
 	schedules := models.GetSchedules(id)
 	json.NewEncoder(w).Encode(schedules)
 }
+
+func RegisterUser(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["name"]
+	lastname := vars["lastname"]
+	email := vars["email"]
+	password := vars["password"]
+	models.RegisterUser(name, lastname, email, password)
+	log.Println("New user registered (" + name + ", " + lastname + ")")
+}

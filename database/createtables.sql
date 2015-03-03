@@ -6,7 +6,7 @@ drop table if exists schedules;
 drop table if exists workouts;
 
 create table users(
-	id int NOT NULL,
+	id int NOT NULL AUTO_INCREMENT,
 	name varchar(255) NOT NULL,
 	lastname varchar(255) NOT NULL,
 	email varchar(255) NOT NULL,

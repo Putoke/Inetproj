@@ -34,4 +34,11 @@ var routes = Routes{
 		"/schedules/{id}",
 		Schedules,
 	},
+
+	Route{
+		"registeruser",
+		"GET",
+		"/user/register/{name}/{lastname}/{email}/{password}",
+		RegisterUser,
+	},
 }
