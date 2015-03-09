@@ -41,3 +41,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("User registered"))
 	}
 }
+
+func Login(w http.ResponseWriter, r *http.Request) {
+
+	// https://github.com/iamjem/go-passwordless-demo
+}

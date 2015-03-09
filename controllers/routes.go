@@ -41,4 +41,11 @@ var routes = Routes{
 		"/user/register/{name}/{lastname}/{email}/{password}",
 		RegisterUser,
 	},
+
+	Route{
+		"login",
+		"POST",
+		"/login/{email}/{password}",
+		Login,
+	},
 }
