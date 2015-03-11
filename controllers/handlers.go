@@ -29,20 +29,5 @@ func Schedules(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(schedules)
 }
 
-func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	name := vars["name"]
-	lastname := vars["lastname"]
-	email := vars["email"]
-	password := vars["password"]
-	success := models.RegisterUser(name, lastname, email, password)
-	if success {
-		log.Println("New user registered (" + name + ", " + lastname + ")")
-		w.Write([]byte("User registered"))
-	}
-}
 
-func Login(w http.ResponseWriter, r *http.Request) {
 
-	// https://github.com/iamjem/go-passwordless-demo
-}
