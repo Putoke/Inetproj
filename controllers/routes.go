@@ -18,7 +18,7 @@ var routes = Routes{
 		"exercises",
 		"GET",
 		"/exercises/{id}",
-		Exercises,
+		Use(Exercises, RequireLogin),
 	},
 
 	Route{
@@ -46,6 +46,6 @@ var routes = Routes{
 		"login",
 		"GET",
 		"/login/{email}/{password}",
-		Login,
+		Logintest,
 	},
 }

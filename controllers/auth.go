@@ -4,11 +4,13 @@ import (
 	"Inetproj/models"
 	"crypto/md5"
 	"encoding/hex"
+	"github.com/dchest/authcookie"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"log"
 	"net/http"
+	"time"
 
 	"bytes"
 	"errors"
@@ -20,6 +22,29 @@ var Store = sessions.NewCookieStore(
 	[]byte(securecookie.GenerateRandomKey(32)))
 
 var ErrInvalidLogin = errors.New("Hash mismatch")
+
+func Logintest(w http.ResponseWriter, r *http.Request) {
+
+	secret := []byte("my secret key")
+
+	email := mux.Vars(r)["email"]
+	password := mux.Vars(r)["password"]
+
+	user := models.GetUserByEmail(email)
+
+	if equalHashes(stringToMD5(password), user.Password) {
+		c := authcookie.NewSinceNow("bender", 24*time.Hour, secret)
+		expiration := time.Now().Add(60 * time.Second)
+		cookie := http.Cookie{Name: "session", Value: c, Path: "/", Expires: expiration}
+		http.SetCookie(w, &cookie)
+
+		fmt.Fprintln(w, http.StatusOK)
+
+	} else {
+		fmt.Fprintln(w, http.StatusForbidden)
+	}
+
+}
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
@@ -59,6 +84,11 @@ func stringToMD5(s string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(s))
 	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func equalHashes(hash1, hash2 string) bool {
+
+	return hash1 == hash2
 }
 
 func compareHashAndPassword(hash []byte, passwd []byte) error {

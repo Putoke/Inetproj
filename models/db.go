@@ -19,6 +19,7 @@ var dbname string = "jedlu"
 var dbprot string = "tcp"
 
 func InitDB() {
+
 	var err error
 	db, err = sql.Open("mysql", dbuser+":"+dbpwd+"@"+dbprot+"("+dbhost+":"+dbport+")/"+dbname)
 
