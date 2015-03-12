@@ -21,6 +21,13 @@ var routes = Routes{
 		Use(Exercises, RequireLogin),
 	},
 
+    Route{
+        "ex",
+        "GET",
+        "/ex",
+        Use(ExercisesTest, RequireLogin),
+    },
+
 	Route{
 		"workouts",
 		"GET",

@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+    ctx "github.com/gorilla/context"
 	"log"
 	"net/http"
 	"time"
@@ -38,9 +39,15 @@ func Logintest(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: "session", Value: c, Path: "/", Expires: expiration}
 		http.SetCookie(w, &cookie)
 
+        session, _ := Store.Get(r, "inet")
+
+        ctx.Set(r, "user", user)
+        session.Values["id"] = user.Id
+
 		fmt.Fprintln(w, http.StatusOK)
 
 	} else {
+        ctx.Set(r, "user", nil)
 		fmt.Fprintln(w, http.StatusForbidden)
 	}
 
