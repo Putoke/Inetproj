@@ -33,7 +33,7 @@ func Logintest(w http.ResponseWriter, r *http.Request) {
 	user := models.GetUserByEmail(email)
 
 	if equalHashes(stringToMD5(password), user.Password) {
-		c := authcookie.NewSinceNow("bender", 24*time.Hour, secret)
+		c := authcookie.NewSinceNow(email, 24*time.Hour, secret)
 		expiration := time.Now().Add(60 * time.Second)
 		cookie := http.Cookie{Name: "session", Value: c, Path: "/", Expires: expiration}
 		http.SetCookie(w, &cookie)
