@@ -39,10 +39,10 @@ func Logintest(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: "session", Value: c, Path: "/", Expires: expiration}
 		http.SetCookie(w, &cookie)
 
-        session, _ := Store.Get(r, "inet")
+        //session, _ := Store.Get(r, "inet")
 
         ctx.Set(r, "user", user)
-        session.Values["id"] = user.Id
+        //session.Values["id"] = user.Id
 
 		fmt.Fprintln(w, http.StatusOK)
 
