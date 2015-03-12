@@ -10,3 +10,6 @@ rebuilddb:
 setupgo:
 	go get github.com/go-sql-driver/mysql
 	go get github.com/gorilla/mux
+
+dblogin:
+	mysql --host=mysql-vt2015.csc.kth.se --user=$(ADMIN) --password=$(ADMINPW)
