@@ -10,8 +10,12 @@ type Config struct {
     Admin string
     Adminpwd string
     AuthSecret string
-    SessionExpirationTimeMinutes int64
+    SessionExpirationTimeMinutes int
     SessionCookieName string
+    ListeningAddress string
+    ListeningPort string
+    ShutdownAddress string
+    ShutdownPort string
 
 }
 

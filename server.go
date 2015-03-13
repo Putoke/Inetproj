@@ -14,14 +14,14 @@ func main() {
     config.InitConfig()
     models.InitDB()
 	router := controllers.NewRouter()
-	log.Println("Server started")
+
 
     http.HandleFunc("/kill",  func(w http.ResponseWriter, r *http.Request) {
         log.Println("Received shutdown request from " + r.RemoteAddr + ". Exiting")
-        os.Exit(0)
     })
-    go http.ListenAndServe("127.0.0.1:8001", nil)
+    go http.ListenAndServe(config.Values.ShutdownAddress+":"+config.Values.ShutdownPort, nil)
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+    log.Println("Server started listening on "+ config.Values.ListeningAddress+":"+config.Values.ListeningPort)
+	log.Fatal(http.ListenAndServe(config.Values.ListeningAddress+":"+config.Values.ListeningPort, router))
 	models.CloseDB()
 }
