@@ -18,13 +18,13 @@ func Exercises(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExercisesTest(w http.ResponseWriter, r *http.Request) {
-    user:= ctx.Get(r, "user").(*models.User)
-    id := user.Id
+    id := ctx.Get(r, "id").(string)
+    email := ctx.Get(r, "email").(string)
 
     log.Println("Get exercises called by userid: " + id + " (" + r.RemoteAddr + ")")
     exercises := models.GetExercises(id)
     json.NewEncoder(w).Encode(exercises)
-    fmt.Fprintln(w, user.Email + " " + id)
+    fmt.Fprintln(w, email + " " + id)
 }
 
 

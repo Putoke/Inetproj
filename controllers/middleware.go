@@ -6,6 +6,7 @@ import (
 	"net/http"
     "log"
     "Inetproj/models"
+    "fmt"
 )
 
 func RequireLogin(handler http.Handler) http.HandlerFunc {
@@ -25,16 +26,16 @@ func RequireLogin(handler http.Handler) http.HandlerFunc {
             if login != ""  {
 
                 user := models.GetUserByEmail(email)
-                session, _ := Store.Get(r, "inet")
-
-                ctx.Set(r, "user", user)
-                session.Values["id"] = user.Id
+                ctx.Set(r, "email", user.Email)
+                ctx.Set(r, "id", user.Id)
                 handler.ServeHTTP(w, r)
             } else {
+                ctx.Set(r, "email", nil)
+                ctx.Set(r, "id", nil)
                 http.Redirect(w, r, "/", http.StatusForbidden)
-                ctx.Set(r, "user", nil)
             }
         } else {
+            fmt.Fprintln(w, http.StatusForbidden)
             // not permitted
         }
 
