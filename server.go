@@ -18,6 +18,7 @@ func main() {
 
     http.HandleFunc("/kill",  func(w http.ResponseWriter, r *http.Request) {
         log.Println("Received shutdown request from " + r.RemoteAddr + ". Exiting")
+        os.Exit(0)
     })
     go http.ListenAndServe(config.Values.ShutdownAddress+":"+config.Values.ShutdownPort, nil)
 
