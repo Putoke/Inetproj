@@ -6,11 +6,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+    "Inetproj/config"
 )
 
 func main() {
+
+    config.InitConfig()
+    models.InitDB()
 	router := controllers.NewRouter()
-	models.InitDB()
 	log.Println("Server started")
 	router.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) { os.Exit(0) })
 

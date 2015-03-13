@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"log"
+    "Inetproj/config"
 )
 
 var db *sql.DB
@@ -21,7 +22,7 @@ var dbprot string = "tcp"
 func InitDB() {
 
 	var err error
-	db, err = sql.Open("mysql", dbuser+":"+dbpwd+"@"+dbprot+"("+dbhost+":"+dbport+")/"+dbname)
+	db, err = sql.Open("mysql", config.Values.User+":"+config.Values.Userpwd+"@"+dbprot+"("+dbhost+":"+dbport+")/"+dbname)
 
 	if err != nil {
 		log.Fatal(err)
@@ -31,6 +32,8 @@ func InitDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+    log.Println("Successfully connected to database")
 
 }
 

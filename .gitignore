@@ -76,3 +76,6 @@ database/adminuser
 database/adminpassword
 database/user
 database/userpassword
+
+#config
+config/config.toml

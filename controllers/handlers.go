@@ -3,45 +3,83 @@ package controllers
 import (
 	"Inetproj/models"
 	"encoding/json"
-	"github.com/gorilla/mux"
     ctx "github.com/gorilla/context"
 	"log"
 	"net/http"
-    "fmt"
+    "runtime"
 )
 
+
+
 func Exercises(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	log.Println("Get exercises called by userid: " + id + " (" + r.RemoteAddr + ")")
-	exercises := models.GetExercises(id)
-	json.NewEncoder(w).Encode(exercises)
-}
+    id, email := getIDAndEmail(r)
 
-func ExercisesTest(w http.ResponseWriter, r *http.Request) {
-    id := ctx.Get(r, "id").(string)
-    email := ctx.Get(r, "email").(string)
-
-    log.Println("Get exercises called by userid: " + id + " (" + r.RemoteAddr + ")")
+    printHandlerLog(id, email, r)
     exercises := models.GetExercises(id)
     json.NewEncoder(w).Encode(exercises)
-    fmt.Fprintln(w, email + " " + id)
 }
 
+func ExercisesDefault(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r)
 
+    printHandlerLog(id, email, r)
+    exercises := models.GetExercises("0")
+    json.NewEncoder(w).Encode(exercises)
+}
 
 func Workouts(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	log.Println("Get workouts called by userid: " + id + " (" + r.RemoteAddr + ")")
-	workouts := models.GetWorkouts(id)
-	json.NewEncoder(w).Encode(workouts)
+    id, email := getIDAndEmail(r)
+
+    printHandlerLog(id, email, r)
+    workouts := models.GetWorkouts(id)
+    json.NewEncoder(w).Encode(workouts)
 }
 
+func WorkoutsDefault(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r)
+
+    printHandlerLog(id, email, r)
+    workouts := models.GetWorkouts("0")
+    json.NewEncoder(w).Encode(workouts)
+}
+
+
 func Schedules(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	log.Println("Get schedules called by userid: " + id + " (" + r.RemoteAddr + ")")
+	id, email := getIDAndEmail(r)
+
+    printHandlerLog(id, email, r)
 	schedules := models.GetSchedules(id)
 	json.NewEncoder(w).Encode(schedules)
 }
 
+func SchedulesDefault(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r)
 
+    printHandlerLog(id, email, r)
+    schedules := models.GetSchedules("0")
+    json.NewEncoder(w).Encode(schedules)
+
+}
+
+func UserInfo(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r)
+    user := models.GetUserByEmail(email)
+
+    printHandlerLog(id, email, r)
+    json.NewEncoder(w).Encode(user)
+}
+
+func getIDAndEmail(r * http.Request) (id, email string) {
+    id = ctx.Get(r, "id").(string)
+    email = ctx.Get(r, "email").(string)
+    return id, email
+}
+
+func printHandlerLog(id string, email string, r * http.Request) {
+
+    pc, _, _, _ := runtime.Caller(1)
+    fname := runtime.FuncForPC(pc).Name()
+    //fname := runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
+    log.Println(fname + " called by email=" + email + ", id=" + id + ", client=" + r.RemoteAddr)
+}
 

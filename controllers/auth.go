@@ -16,6 +16,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+    "Inetproj/config"
 )
 
 var Store = sessions.NewCookieStore(
@@ -24,9 +25,9 @@ var Store = sessions.NewCookieStore(
 
 var ErrInvalidLogin = errors.New("Hash mismatch")
 
-func Logintest(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 
-	secret := []byte("my secret key")
+
 
 	email := mux.Vars(r)["email"]
 	password := mux.Vars(r)["password"]
@@ -34,42 +35,27 @@ func Logintest(w http.ResponseWriter, r *http.Request) {
 	user := models.GetUserByEmail(email)
 
 	if equalHashes(stringToMD5(password), user.Password) {
-		c := authcookie.NewSinceNow(email, 24*time.Hour, secret)
-		expiration := time.Now().Add(60 * time.Second)
-		cookie := http.Cookie{Name: "session", Value: c, Path: "/", Expires: expiration}
+        duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
+        expiration := time.Now().Add(duration)
+
+		c := authcookie.NewSinceNow(email, duration, []byte(config.Values.AuthSecret))
+
+		cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration}
 		http.SetCookie(w, &cookie)
 
         ctx.Set(r, "email", user.Email)
         ctx.Set(r, "id", user.Id)
 
+        log.Println("Login successful from " +r.RemoteAddr + " as email=" + user.Email)
 		fmt.Fprintln(w, http.StatusOK)
 
 	} else {
         ctx.Set(r, "email", nil)
         ctx.Set(r, "id", nil)
+        log.Println("Login failed from " +r.RemoteAddr + " as email=" + user.Email)
 		fmt.Fprintln(w, http.StatusForbidden)
 	}
 
-}
-
-func Login(w http.ResponseWriter, r *http.Request) {
-
-	email := mux.Vars(r)["email"]
-	password := mux.Vars(r)["password"]
-	//    session, _ := Store.Get(r, "inetproj")
-
-	user := models.GetUserByEmail(email)
-
-	err := compareHashAndPassword([]byte(user.Password), []byte(stringToMD5(password)))
-
-	log.Println("Login attempt: email=" + email + ", password=" + password + "\nUser=" + user.Email + ", password=" + user.Password + "\nhashcompute=" + stringToMD5(password))
-	if err != nil {
-		fmt.Fprintln(w, err)
-	} else {
-		fmt.Fprint(w, "Login successfull")
-	}
-
-	// https://github.com/iamjem/go-passwordless-demo
 }
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {

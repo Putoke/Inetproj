@@ -14,33 +14,55 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes{
-	Route{
-		"exercises",
-		"GET",
-		"/exercises/{id}",
-		Use(Exercises, RequireLogin),
-	},
 
     Route{
-        "ex",
+        "exercises",
         "GET",
-        "/ex",
-        Use(ExercisesTest, RequireLogin),
+        "/exercises",
+        Use(Exercises, RequireLogin),
     },
 
 	Route{
-		"workouts",
+		"exercises_default",
 		"GET",
-		"/workouts/{id}",
-		Workouts,
+		"/exercises/default",
+		Use(ExercisesDefault, RequireLogin),
 	},
+
+    Route{
+        "workouts",
+        "GET",
+        "/workouts",
+        Use(Workouts, RequireLogin),
+    },
+
+    Route {
+        "workouts_default",
+        "GET",
+        "/workouts/default",
+        Use(WorkoutsDefault, RequireLogin),
+    },
 
 	Route{
 		"schedules",
 		"GET",
-		"/schedules/{id}",
-		Schedules,
+		"/schedules",
+		Use(Schedules, RequireLogin),
 	},
+
+    Route{
+        "schedules_default",
+        "GET",
+        "/schedules/default",
+        Use(SchedulesDefault, RequireLogin),
+    },
+
+    Route{
+        "userinfo",
+        "GET",
+        "/user/info",
+        Use(UserInfo, RequireLogin),
+    },
 
 	Route{
 		"registeruser",
@@ -53,6 +75,8 @@ var routes = Routes{
 		"login",
 		"GET",
 		"/login/{email}/{password}",
-		Logintest,
+		Login,
 	},
 }
+
+

@@ -4,9 +4,9 @@ import (
 	"github.com/dchest/authcookie"
     ctx "github.com/gorilla/context"
 	"net/http"
-    "log"
     "Inetproj/models"
     "fmt"
+    "Inetproj/config"
 )
 
 func RequireLogin(handler http.Handler) http.HandlerFunc {
@@ -16,15 +16,10 @@ func RequireLogin(handler http.Handler) http.HandlerFunc {
 		cookie, _ := r.Cookie("session")
 
         if cookie != nil {
-            secret := []byte("my secret key")
-            login := authcookie.Login(cookie.Value, secret)
-            email,_,_ := authcookie.Parse(cookie.Value, secret)
-
-            log.Println("login = " + email)
-
+            login := authcookie.Login(cookie.Value, []byte(config.Values.AuthSecret))
+            email,_,_ := authcookie.Parse(cookie.Value, []byte(config.Values.AuthSecret))
 
             if login != ""  {
-
                 user := models.GetUserByEmail(email)
                 ctx.Set(r, "email", user.Email)
                 ctx.Set(r, "id", user.Id)
