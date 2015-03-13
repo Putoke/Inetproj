@@ -22,7 +22,7 @@ func InitConfig() {
 
 
     if _, err := toml.DecodeFile(confpath, &Values); err != nil {
-        log.Fatal("Failed to load config file '" + confpath + "': ", err)
+        log.Fatal("Failed to load config file '" + confpath + "' with error: ", err)
     }
 
     log.Println("Successfully loaded config file '" + confpath + "'")
