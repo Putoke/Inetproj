@@ -1,22 +1,21 @@
 package controllers
 
 import (
+	"Inetproj/config"
 	"Inetproj/models"
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
+	"errors"
 	"github.com/dchest/authcookie"
+	ctx "github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-    ctx "github.com/gorilla/context"
 	"log"
 	"net/http"
 	"time"
-
-	"bytes"
-	"errors"
-	"fmt"
-    "Inetproj/config"
 )
 
 var Store = sessions.NewCookieStore(
@@ -25,9 +24,12 @@ var Store = sessions.NewCookieStore(
 
 var ErrInvalidLogin = errors.New("Hash mismatch")
 
+type Status struct {
+	Status string `json:"status"`
+	Code   int    `json:"code"`
+}
+
 func Login(w http.ResponseWriter, r *http.Request) {
-
-
 
 	email := mux.Vars(r)["email"]
 	password := mux.Vars(r)["password"]
@@ -35,25 +37,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	user := models.GetUserByEmail(email)
 
 	if equalHashes(stringToMD5(password), user.Password) {
-        duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
-        expiration := time.Now().Add(duration)
+		duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
+		expiration := time.Now().Add(duration)
 
 		c := authcookie.NewSinceNow(email, duration, []byte(config.Values.AuthSecret))
 
 		cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration}
 		http.SetCookie(w, &cookie)
 
-        ctx.Set(r, "email", user.Email)
-        ctx.Set(r, "id", user.Id)
+		ctx.Set(r, "email", user.Email)
+		ctx.Set(r, "id", user.Id)
 
-        log.Println("Login successful from " +r.RemoteAddr + " as email=" + user.Email)
-		fmt.Fprintln(w, http.StatusOK)
+		log.Println("Login successful from " + r.RemoteAddr + " as email=" + user.Email)
+		SendStatusJSON(w, "fisk", http.StatusOK)
 
 	} else {
-        ctx.Set(r, "email", nil)
-        ctx.Set(r, "id", nil)
-        log.Println("Login failed from " +r.RemoteAddr + " as email=" + user.Email)
-		fmt.Fprintln(w, http.StatusForbidden)
+		ctx.Set(r, "email", nil)
+		ctx.Set(r, "id", nil)
+		log.Println("Login failed from " + r.RemoteAddr + " as email=" + user.Email)
+		SendStatusJSON(w, "", http.StatusForbidden)
 	}
 
 }
@@ -88,4 +90,9 @@ func compareHashAndPassword(hash []byte, passwd []byte) error {
 		return ErrInvalidLogin
 	}
 	return nil
+}
+
+func SendStatusJSON(w http.ResponseWriter, status string, code int) {
+	s := &Status{Status: status, Code: code}
+	json.NewEncoder(w).Encode(s)
 }
