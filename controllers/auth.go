@@ -22,8 +22,6 @@ var Store = sessions.NewCookieStore(
 	[]byte(securecookie.GenerateRandomKey(64)), // signing key
 	[]byte(securecookie.GenerateRandomKey(32)))
 
-var ErrInvalidLogin = errors.New("Hash mismatch")
-
 type Status struct {
 	Status string `json:"status"`
 	Code   int    `json:"code"`
@@ -35,6 +33,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password := mux.Vars(r)["password"]
 
 	user := models.GetUserByEmail(email)
+
+
+    /*
+    TODO:
+    Check if the client already is logged in (has a valid session)
+    */
 
 	if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
 		duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
@@ -81,15 +85,7 @@ func stringToMD5(s string) string {
 }
 
 func equalHashes(hash1 []byte, hash2 []byte) bool {
-
 	return bytes.Compare(hash1[:], hash2[:]) == 0
-}
-
-func compareHashAndPassword(hash []byte, passwd []byte) error {
-	if bytes.Compare(hash[:], passwd[:]) != 0 {
-		return ErrInvalidLogin
-	}
-	return nil
 }
 
 func SendStatusJSON(w http.ResponseWriter, status string, code int) {
