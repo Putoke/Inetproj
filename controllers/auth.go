@@ -36,7 +36,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	user := models.GetUserByEmail(email)
 
-	if equalHashes(stringToMD5(password), user.Password) {
+	if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
 		duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
 		expiration := time.Now().Add(duration)
 
@@ -49,12 +49,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		ctx.Set(r, "id", user.Id)
 
 		log.Println("Login successful from " + r.RemoteAddr + " as email=" + user.Email)
-		SendStatusJSON(w, "fisk", http.StatusOK)
+		SendStatusJSON(w, "", http.StatusOK)
 
 	} else {
 		ctx.Set(r, "email", nil)
 		ctx.Set(r, "id", nil)
-		log.Println("Login failed from " + r.RemoteAddr + " as email=" + user.Email)
+		log.Println("Login failed from " + r.RemoteAddr + " as email=" + email)
 		SendStatusJSON(w, "", http.StatusForbidden)
 	}
 
@@ -80,9 +80,9 @@ func stringToMD5(s string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func equalHashes(hash1, hash2 string) bool {
+func equalHashes(hash1 []byte, hash2 []byte) bool {
 
-	return hash1 == hash2
+	return bytes.Compare(hash1[:], hash2[:]) == 0
 }
 
 func compareHashAndPassword(hash []byte, passwd []byte) error {

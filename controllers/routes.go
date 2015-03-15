@@ -11,9 +11,7 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
-type Routes []Route
-
-var routes = Routes{
+var routes = []Route{
 
     Route{
         "exercises",
@@ -23,7 +21,7 @@ var routes = Routes{
     },
 
 	Route{
-		"exercises_default",
+		"exercisesDefault",
 		"GET",
 		"/exercises/default",
 		Use(ExercisesDefault, RequireLogin),
@@ -37,7 +35,7 @@ var routes = Routes{
     },
 
     Route {
-        "workouts_default",
+        "workoutsDefault",
         "GET",
         "/workouts/default",
         Use(WorkoutsDefault, RequireLogin),
@@ -51,7 +49,7 @@ var routes = Routes{
 	},
 
     Route{
-        "schedules_default",
+        "schedulesDefault",
         "GET",
         "/schedules/default",
         Use(SchedulesDefault, RequireLogin),

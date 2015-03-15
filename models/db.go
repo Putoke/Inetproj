@@ -38,5 +38,5 @@ func InitDB() {
 }
 
 func CloseDB() {
-	defer db.Close()
+	db.Close()
 }
