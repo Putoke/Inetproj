@@ -7,7 +7,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"github.com/dchest/authcookie"
 	ctx "github.com/gorilla/context"
 	"github.com/gorilla/mux"
@@ -34,34 +33,33 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	user := models.GetUserByEmail(email)
 
+    if _, ok:= requestHasValidUserSession(r, email); ok {
+        status := "Already logged in"
+        log.Println("Login failed from " + r.RemoteAddr + " as email=" + email + " (" + status + ")")
+        SendStatusJSON(w, status, http.StatusPreconditionFailed)
+    } else {
+        if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
+            duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
+            expiration := time.Now().Add(duration)
 
-    /*
-    TODO:
-    Check if the client already is logged in (has a valid session)
-    */
+            c := authcookie.NewSinceNow(email, duration, []byte(config.Values.AuthSecret))
 
-	if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
-		duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
-		expiration := time.Now().Add(duration)
+            cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration}
+            http.SetCookie(w, &cookie)
 
-		c := authcookie.NewSinceNow(email, duration, []byte(config.Values.AuthSecret))
+            ctx.Set(r, "email", user.Email)
+            ctx.Set(r, "id", user.Id)
 
-		cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration}
-		http.SetCookie(w, &cookie)
+            log.Println("Login successful from " + r.RemoteAddr + " as email=" + user.Email)
+            SendStatusJSON(w, "", http.StatusOK)
 
-		ctx.Set(r, "email", user.Email)
-		ctx.Set(r, "id", user.Id)
-
-		log.Println("Login successful from " + r.RemoteAddr + " as email=" + user.Email)
-		SendStatusJSON(w, "", http.StatusOK)
-
-	} else {
-		ctx.Set(r, "email", nil)
-		ctx.Set(r, "id", nil)
-		log.Println("Login failed from " + r.RemoteAddr + " as email=" + email)
-		SendStatusJSON(w, "", http.StatusForbidden)
-	}
-
+        } else {
+            ctx.Set(r, "email", nil)
+            ctx.Set(r, "id", nil)
+            log.Println("Login failed from " + r.RemoteAddr + " as email=" + email)
+            SendStatusJSON(w, "", http.StatusForbidden)
+        }
+    }
 }
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -91,4 +89,38 @@ func equalHashes(hash1 []byte, hash2 []byte) bool {
 func SendStatusJSON(w http.ResponseWriter, status string, code int) {
 	s := &Status{Status: status, Code: code}
 	json.NewEncoder(w).Encode(s)
+}
+func requestHasValidUserSession(r * http.Request, email string) (* http.Cookie, bool) {
+    cookie, _ := r.Cookie("session")
+
+    if cookie != nil {
+        login := authcookie.Login(cookie.Value, []byte(config.Values.AuthSecret))
+        cookieEmail, _,_ := authcookie.Parse(cookie.Value, []byte(config.Values.AuthSecret))
+
+        if login != "" && email == cookieEmail {
+            return cookie, true
+        } else {
+            return nil, false
+        }
+
+    } else {
+        return nil, false
+    }
+}
+
+func requestHasValidSession( r * http.Request) (* http.Cookie, bool) {
+    cookie, _ := r.Cookie("session")
+
+    if cookie != nil {
+        login := authcookie.Login(cookie.Value, []byte(config.Values.AuthSecret))
+
+        if login != "" {
+            return cookie, true
+        } else {
+            return nil, false
+        }
+
+    } else {
+        return nil, false
+    }
 }
