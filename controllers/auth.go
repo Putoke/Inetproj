@@ -33,31 +33,29 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	user := models.GetUserByEmail(email)
 
-    if _, ok:= requestHasValidUserSession(r, email); ok {
+    if _, ok:= requestHasValidSession(r); ok {
         status := "Already logged in"
         log.Println("Login failed from " + r.RemoteAddr + " as email=" + email + " (" + status + ")")
-        SendStatusJSON(w, status, http.StatusPreconditionFailed)
+        SendHTTPStatusJSON(w, http.StatusForbidden)
     } else {
         if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
             duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
             expiration := time.Now().Add(duration)
 
             c := authcookie.NewSinceNow(email, duration, []byte(config.Values.AuthSecret))
-
-            cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration}
+            cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration, HttpOnly: true}
             http.SetCookie(w, &cookie)
 
             ctx.Set(r, "email", user.Email)
             ctx.Set(r, "id", user.Id)
 
             log.Println("Login successful from " + r.RemoteAddr + " as email=" + user.Email)
-            SendStatusJSON(w, "", http.StatusOK)
-
+            SendHTTPStatusJSON(w, http.StatusOK)
         } else {
             ctx.Set(r, "email", nil)
             ctx.Set(r, "id", nil)
             log.Println("Login failed from " + r.RemoteAddr + " as email=" + email)
-            SendStatusJSON(w, "", http.StatusForbidden)
+            SendHTTPStatusJSON(w, http.StatusUnauthorized)
         }
     }
 }
@@ -90,6 +88,11 @@ func SendStatusJSON(w http.ResponseWriter, status string, code int) {
 	s := &Status{Status: status, Code: code}
 	json.NewEncoder(w).Encode(s)
 }
+
+func SendHTTPStatusJSON(w http.ResponseWriter, code int) {
+    SendStatusJSON(w, http.StatusText(code), code)
+}
+
 func requestHasValidUserSession(r * http.Request, email string) (* http.Cookie, bool) {
     cookie, _ := r.Cookie("session")
 

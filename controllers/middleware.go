@@ -22,7 +22,7 @@ func RequireLogin(handler http.Handler) http.HandlerFunc {
         } else {
             ctx.Set(r, "email", nil)
             ctx.Set(r, "id", nil)
-            SendStatusJSON(w, "", http.StatusForbidden)
+            SendHTTPStatusJSON(w, http.StatusUnauthorized)
         }
 
 	}
