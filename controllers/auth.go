@@ -68,16 +68,16 @@ func LoginPost( w http.ResponseWriter, r * http.Request) {
         log.Fatal(err)
     }
 
-    loginuser := new(models.User)
-    err = json.Unmarshal(body, &loginuser)
+    user := new(models.User)
+    err = json.Unmarshal(body, &user)
     if err != nil {
         log.Fatal(err)
     }
 
-    email := loginuser.Email
-    password := loginuser.Password
+    email := user.Email
+    password := user.Password
 
-    user := models.GetUserByEmail(email)
+    user = models.GetUserByEmail(email)
 
     if _, ok:= requestHasValidSession(r); ok {
         status := "Already logged in"
