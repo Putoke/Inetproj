@@ -15,6 +15,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+    "io/ioutil"
 )
 
 var Store = sessions.NewCookieStore(
@@ -62,10 +63,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 func LoginPost( w http.ResponseWriter, r * http.Request) {
 
+    body, err := ioutil.ReadAll(r.Body)
+
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    log.Println(string(body))
+
     user := new(models.User)
+    err = json.Unmarshal(body, &user)
 
-    json.NewDecoder(r.Body).Decode(user)
-
+    if err != nil {
+        log.Fatal(err)
+    }
+    
     log.Println("email = " + user.Email + ", password = " + user.Password)
 
 }
