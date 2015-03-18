@@ -64,21 +64,48 @@ func Login(w http.ResponseWriter, r *http.Request) {
 func LoginPost( w http.ResponseWriter, r * http.Request) {
 
     body, err := ioutil.ReadAll(r.Body)
-
     if err != nil {
         log.Fatal(err)
     }
 
-    log.Println(string(body))
-
-    user := new(models.User)
-    err = json.Unmarshal(body, &user)
-
+    loginuser := new(models.User)
+    err = json.Unmarshal(body, &loginuser)
     if err != nil {
         log.Fatal(err)
     }
-    
-    log.Println("email = " + user.Email + ", password = " + user.Password)
+
+    email := loginuser.Email
+    password := loginuser.Password
+
+    user := models.GetUserByEmail(email)
+
+    if _, ok:= requestHasValidSession(r); ok {
+        status := "Already logged in"
+        log.Println("Login failed from " + r.RemoteAddr + " as email=" + email + " (" + status + ")")
+        SendHTTPStatusJSON(w, http.StatusForbidden)
+    } else {
+        if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
+            duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
+            expiration := time.Now().Add(duration)
+
+            c := authcookie.NewSinceNow(email, duration, []byte(config.Values.AuthSecret))
+            cookie := http.Cookie{Name: config.Values.SessionCookieName, Value: c, Path: "/", Expires: expiration, HttpOnly: true}
+            http.SetCookie(w, &cookie)
+
+            ctx.Set(r, "email", user.Email)
+            ctx.Set(r, "id", user.Id)
+
+            log.Println("Login successful from " + r.RemoteAddr + " as email=" + user.Email)
+            SendHTTPStatusJSON(w, http.StatusOK)
+        } else {
+            ctx.Set(r, "email", nil)
+            ctx.Set(r, "id", nil)
+            log.Println("Login failed from " + r.RemoteAddr + " as email=" + email)
+            SendHTTPStatusJSON(w, http.StatusUnauthorized)
+        }
+    }
+
+
 
 }
 
