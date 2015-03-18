@@ -60,6 +60,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func LoginPost( w http.ResponseWriter, r * http.Request) {
+
+    user := new(models.User)
+
+    json.NewDecoder(r.Body).Decode(user)
+
+    log.Println("email = " + user.Email + ", password = " + user.Password)
+
+}
+
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["name"]

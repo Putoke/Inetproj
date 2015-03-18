@@ -68,13 +68,20 @@ var routes = []Route{
 		"/user/register/{name}/{lastname}/{email}/{password}",
 		RegisterUser,
 	},
-
+/*
 	Route{
 		"login",
 		"GET",
 		"/login/{email}/{password}",
 		Login,
 	},
+*/
+    Route {
+        "login",
+        "POST",
+        "/login",
+        LoginPost,
+    },
 }
 
 
