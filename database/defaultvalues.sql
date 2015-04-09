@@ -19,8 +19,13 @@ insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpas
 insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 2", "Armhävningar", 3, 15);
 insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 2", "Situps", 3, 15);
 
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 3", "Situps", 3, 15);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 3", "Marklyft", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 3", "Benpress", 3, 15);
 
 #Default schedule
 insert into schedules (userid, name, workout, day) values (1, "Exempelschema", "Exempelpass", "Måndag");
 insert into schedules (userid, name, workout, day) values (1, "Exempelschema", "Exempelpass 2", "Tisdag");
+insert into schedules (userid, name, workout, day) values (1, "Exempelschema 2", "Exempelpass 3", "Onsdag");
 insert into schedules (userid, name, workout, day) values (1, "Exempelschema 2", "Exempelpass", "Fredag");
+
