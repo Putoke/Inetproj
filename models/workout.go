@@ -1,18 +1,24 @@
 package models
 
-import "log"
+import (
+    "log"
+)
 
 type Workout struct {
-	Userid   string `json:"userid"`
-	Name     string `json:"name"`
+	//Name     string `json:"name"`
 	Exercise string `json:"exercise"`
 	Sets     string `json:"sets"`
 	Reps     string `json:"reps"`
 }
 
+type workoutResult struct {
+    Name string `json:"name"`
+    Exercises []*Workout `json:"exercises"`
+}
+
 const getWorkoutsQuery = "SELECT name, exercise, sets, reps FROM workouts WHERE userid = ?"
 
-func GetWorkouts(id string) []*Workout {
+func GetWorkouts(id string) []*workoutResult {
 
 	stmt, err := db.Prepare(getWorkoutsQuery)
 	if err != nil {
@@ -20,7 +26,7 @@ func GetWorkouts(id string) []*Workout {
 	}
 	rows, err := stmt.Query(id)
 
-	workouts := make([]*Workout, 0, 10)
+    m := make(map[string][]*Workout)
 
 	var name, workout, sets, reps string
 
@@ -29,8 +35,19 @@ func GetWorkouts(id string) []*Workout {
 		if err != nil {
 			log.Fatal(err)
 		}
-		workouts = append(workouts, &Workout{id, name, workout, sets, reps})
+
+        m[name] = append(m[name], &Workout{workout, sets, reps})
+
 	}
 
-	return workouts
+    result := make([]*workoutResult,0, 10)
+
+    for k, _ := range m {
+        result = append(result, &workoutResult{k, m[k]})
+    }
+
+
+
+
+	return result
 }

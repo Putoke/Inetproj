@@ -3,15 +3,19 @@ package models
 import "log"
 
 type Schedule struct {
-	Userid  string `json:"userid"`
-	Name    string `json:"name"`
+	//Name    string `json:"name"`
 	Workout string `json:"workout"`
 	Day     string `json:"day"`
 }
 
+type scheduleResult struct {
+    Name string `json:"name"`
+    Schedules []*Schedule `json:"schedules"`
+}
+
 const getSchedulesQuery = "SELECT name, workout, day FROM schedules WHERE userid = ?"
 
-func GetSchedules(id string) []*Schedule {
+func GetSchedules(id string) []*scheduleResult {
 
 	stmt, err := db.Prepare(getSchedulesQuery)
 	if err != nil {
@@ -19,7 +23,7 @@ func GetSchedules(id string) []*Schedule {
 	}
 	rows, err := stmt.Query(id)
 
-	schedules := make([]*Schedule, 0, 10)
+    m := make(map[string][]*Schedule)
 
 	var name, workout, day string
 
@@ -28,8 +32,14 @@ func GetSchedules(id string) []*Schedule {
 		if err != nil {
 			log.Fatal(err)
 		}
-		schedules = append(schedules, &Schedule{id, name, workout, day})
+        m[name] = append(m[name], &Schedule{workout, day})
 	}
 
-	return schedules
+    result := make([]*scheduleResult,0, 10)
+
+    for k, _ := range m {
+        result = append(result, &scheduleResult{k, m[k]})
+    }
+
+	return result
 }

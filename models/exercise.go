@@ -5,10 +5,11 @@ import (
 )
 
 type Exercise struct {
-	Userid      string `json:"userid"`
+	//Userid      string `json:"userid"`
 	Name        string `json:"name"`
 	Musclegroup string `json:"musclegroup"`
 }
+
 
 const getExercisesQuery = "SELECT name, musclegroup FROM exercises WHERE userid = ?"
 
@@ -29,7 +30,7 @@ func GetExercises(id string) []*Exercise {
 		if err != nil {
 			log.Fatal(err)
 		}
-		exercises = append(exercises, &Exercise{id, name, musclegroup})
+		exercises = append(exercises, &Exercise{name, musclegroup})
 	}
 
 	return exercises
