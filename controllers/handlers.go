@@ -43,6 +43,7 @@ func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
     data := mux.Vars(r)["json"]
     */
     models.AddExercise(id,string( body[:]))
+    SendHTTPStatusJSON(w, http.StatusOK)
 }
 
 func ExerciseRemove(w http.ResponseWriter, r * http.Request) {
