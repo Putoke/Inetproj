@@ -28,16 +28,16 @@ var routes = []Route{
 	},
 
     Route{
-        "schedulesAdd",
+        "exercisesAdd",
         "POST",
         "/exercises/add",
         Use(ExercisesAdd, RequireLogin),
     },
 
     Route{
-        "schedulesAdd",
-        "GET",
-        "/exercises/remove/{json}",
+        "exercisesAdd",
+        "POST",
+        "/exercises/remove",
         Use(ExerciseRemove, RequireLogin),
     },
 
