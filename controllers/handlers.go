@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
     "runtime"
+    "github.com/gorilla/mux"
 )
 
 
@@ -25,6 +26,12 @@ func ExercisesDefault(w http.ResponseWriter, r * http.Request) {
     printHandlerLog(id, email, r)
     exercises := models.GetExercises("0")
     json.NewEncoder(w).Encode(exercises)
+}
+
+func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r);
+    printHandlerLog(id, email, r );
+    models.AddExercise(id, mux.Vars(r)["name"], mux.Vars(r)["musclegroup"])
 }
 
 func Workouts(w http.ResponseWriter, r *http.Request) {

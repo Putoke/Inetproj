@@ -28,6 +28,13 @@ var routes = []Route{
 	},
 
     Route{
+        "schedulesAdd",
+        "GET",
+        "/exercises/add/{name}/{musclegroup}",
+        Use(ExercisesAdd, RequireLogin),
+    },
+
+    Route{
         "workouts",
         "GET",
         "/workouts",
@@ -54,6 +61,8 @@ var routes = []Route{
         "/schedules/default",
         Use(SchedulesDefault, RequireLogin),
     },
+
+
 
     Route{
         "userinfo",

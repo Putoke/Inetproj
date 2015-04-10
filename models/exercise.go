@@ -12,6 +12,7 @@ type Exercise struct {
 
 
 const getExercisesQuery = "SELECT name, musclegroup FROM exercises WHERE userid = ?"
+const addExerciseQuery = "INSERT INTO exercises (userid, name, musclegroup) VALUES (?, ?, ?)"
 
 func GetExercises(id string) []*Exercise {
 
@@ -34,4 +35,15 @@ func GetExercises(id string) []*Exercise {
 	}
 
 	return exercises
+}
+
+func AddExercise(id string, name string, musclegroup string) {
+
+    stmt, err := db.Prepare(addExerciseQuery);
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    stmt.Exec(id, name, musclegroup)
+
 }
