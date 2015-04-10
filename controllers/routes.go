@@ -55,6 +55,13 @@ var routes = []Route{
         Use(WorkoutsDefault, RequireLogin),
     },
 
+    Route {
+        "workoutsAdd",
+        "GET",
+        "/workouts/add/{json}",
+        Use(WorkoutsAdd, RequireLogin),
+        },
+
 	Route{
 		"schedules",
 		"GET",

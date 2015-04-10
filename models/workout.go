@@ -2,10 +2,11 @@ package models
 
 import (
     "log"
+    "encoding/json"
 )
 
 type Workout struct {
-	//Name     string `json:"name"`
+    Name string `json:"name,omitempty"`
 	Exercise string `json:"exercise"`
 	Sets     string `json:"sets"`
 	Reps     string `json:"reps"`
@@ -17,6 +18,8 @@ type workoutResult struct {
 }
 
 const getWorkoutsQuery = "SELECT name, exercise, sets, reps FROM workouts WHERE userid = ?"
+const addWorkoutQuery = "INSERT INTO workouts (userid, name, exercise, sets, reps) VALUES (?, ?, ?, ?, ?)"
+const removeWorkoutQuery = "DELETE FROM workouts WHERE userid=? AND name=?"
 
 func GetWorkouts(id string) []*workoutResult {
 
@@ -36,7 +39,7 @@ func GetWorkouts(id string) []*workoutResult {
 			log.Fatal(err)
 		}
 
-        m[name] = append(m[name], &Workout{workout, sets, reps})
+        m[name] = append(m[name], &Workout{"", workout, sets, reps})
 
 	}
 
@@ -46,8 +49,38 @@ func GetWorkouts(id string) []*workoutResult {
         result = append(result, &workoutResult{k, m[k]})
     }
 
-
-
-
 	return result
+}
+
+
+func AddWorkout(id string, data string) {
+    stmt, err := db.Prepare(addWorkoutQuery);
+    if err != nil {
+        log.Fatal(err)
+    }
+    var ex Workout
+    err = json.Unmarshal([]byte(data), &ex)
+
+
+    log.Println("ex.name = " + ex.Name)
+    log.Println("ex.Exercise = " +ex.Exercise)
+    if len(ex.Name) > 0 && len(ex.Exercise) > 0 {
+        log.Println("added")
+        stmt.Exec(id, ex.Name, ex.Exercise, ex.Reps, ex.Sets)
+    }
+
+
+}
+
+func RemoveWorkout(id string, data string) {
+
+    stmt, err := db.Prepare(removeWorkoutQuery);
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    var ex Workout
+    err = json.Unmarshal([]byte(data), &ex)
+
+    stmt.Exec(id, ex.Name)
 }

@@ -3,7 +3,7 @@ package models
 import "log"
 
 type Schedule struct {
-	//Name    string `json:"name"`
+    Name string `json:"name,omitempty"`
 	Workout string `json:"workout"`
 	Day     string `json:"day"`
 }
@@ -32,7 +32,7 @@ func GetSchedules(id string) []*scheduleResult {
 		if err != nil {
 			log.Fatal(err)
 		}
-        m[name] = append(m[name], &Schedule{workout, day})
+        m[name] = append(m[name], &Schedule{"", workout, day})
 	}
 
     result := make([]*scheduleResult,0, 10)

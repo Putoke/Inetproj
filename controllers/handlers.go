@@ -8,6 +8,7 @@ import (
 	"net/http"
     "runtime"
     "github.com/gorilla/mux"
+    "io/ioutil"
 )
 
 
@@ -31,17 +32,30 @@ func ExercisesDefault(w http.ResponseWriter, r * http.Request) {
 func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r);
     printHandlerLog(id, email, r );
-    json := mux.Vars(r)["json"]
-    models.AddExercise(id, json)
+
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    /*
+    data := mux.Vars(r)["json"]
+    */
+    models.AddExercise(id,string( body[:]))
 }
 
 func ExerciseRemove(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r);
     printHandlerLog(id, email, r );
-    json := mux.Vars(r)["json"]
-    models.RemoveExercise(id, json)
+    data := mux.Vars(r)["json"]
+    models.RemoveExercise(id, data)
 
 }
+
+/*
+*   WORKOUTS
+*/
 
 func Workouts(w http.ResponseWriter, r *http.Request) {
     id, email := getIDAndEmail(r)
@@ -57,6 +71,13 @@ func WorkoutsDefault(w http.ResponseWriter, r * http.Request) {
     printHandlerLog(id, email, r)
     workouts := models.GetWorkouts("0")
     json.NewEncoder(w).Encode(workouts)
+}
+
+func WorkoutsAdd(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r);
+    printHandlerLog(id, email, r );
+    data := mux.Vars(r)["json"]
+    models.AddWorkout(id, data);
 }
 
 
