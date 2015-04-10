@@ -31,7 +31,9 @@ func ExercisesDefault(w http.ResponseWriter, r * http.Request) {
 func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r);
     printHandlerLog(id, email, r );
-    models.AddExercise(id, mux.Vars(r)["name"], mux.Vars(r)["musclegroup"])
+
+    json := mux.Vars(r)["json"]
+    models.AddExercise(id, json)
 }
 
 func Workouts(w http.ResponseWriter, r *http.Request) {

@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+    "encoding/json"
 )
 
 type Exercise struct {
@@ -37,13 +38,18 @@ func GetExercises(id string) []*Exercise {
 	return exercises
 }
 
-func AddExercise(id string, name string, musclegroup string) {
+func AddExercise(id string, s string) {
 
     stmt, err := db.Prepare(addExerciseQuery);
     if err != nil {
         log.Fatal(err)
     }
 
-    stmt.Exec(id, name, musclegroup)
+    var ex Exercise
+
+    err = json.Unmarshal([]byte(s), &ex)
+
+
+    stmt.Exec(id, ex.Name, ex.Musclegroup)
 
 }
