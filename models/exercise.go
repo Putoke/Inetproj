@@ -14,6 +14,7 @@ type Exercise struct {
 
 const getExercisesQuery = "SELECT name, musclegroup FROM exercises WHERE userid = ?"
 const addExerciseQuery = "INSERT INTO exercises (userid, name, musclegroup) VALUES (?, ?, ?)"
+const removeExerciseQuery = "DELETE FROM exercises WHERE userid=? AND name=?"
 
 func GetExercises(id string) []*Exercise {
 
@@ -38,18 +39,30 @@ func GetExercises(id string) []*Exercise {
 	return exercises
 }
 
-func AddExercise(id string, s string) {
-
+func AddExercise(id string, data string) {
     stmt, err := db.Prepare(addExerciseQuery);
+    if err != nil {
+        log.Fatal(err)
+    }
+    var ex Exercise
+    err = json.Unmarshal([]byte(data), &ex)
+
+    if len(ex.Name) > 0 {
+        stmt.Exec(id, ex.Name, ex.Musclegroup)
+    }
+
+
+}
+
+func RemoveExercise(id string, data string) {
+
+    stmt, err := db.Prepare(removeExerciseQuery);
     if err != nil {
         log.Fatal(err)
     }
 
     var ex Exercise
+    err = json.Unmarshal([]byte(data), &ex)
 
-    err = json.Unmarshal([]byte(s), &ex)
-
-
-    stmt.Exec(id, ex.Name, ex.Musclegroup)
-
+    stmt.Exec(id, ex.Name)
 }
