@@ -61,15 +61,9 @@ func AddWorkout(id string, data string) {
     var ex Workout
     err = json.Unmarshal([]byte(data), &ex)
 
-
-    log.Println("ex.name = " + ex.Name)
-    log.Println("ex.Exercise = " +ex.Exercise)
     if len(ex.Name) > 0 && len(ex.Exercise) > 0 {
-        log.Println("added")
         stmt.Exec(id, ex.Name, ex.Exercise, ex.Reps, ex.Sets)
     }
-
-
 }
 
 func RemoveWorkout(id string, data string) {

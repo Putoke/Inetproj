@@ -57,10 +57,17 @@ var routes = []Route{
 
     Route {
         "workoutsAdd",
-        "GET",
+        "POST",
         "/workouts/add/{json}",
         Use(WorkoutsAdd, RequireLogin),
-        },
+    },
+
+    Route {
+        "workoutsRemove",
+        "POST",
+        "/workouts/remove",
+        Use(WorkoutsRemove, RequireLogin),
+    },
 
 	Route{
 		"schedules",

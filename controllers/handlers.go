@@ -7,11 +7,12 @@ import (
 	"log"
 	"net/http"
     "runtime"
-    "github.com/gorilla/mux"
     "io/ioutil"
 )
 
-
+/*
+*   EXERCISES
+*/
 
 func Exercises(w http.ResponseWriter, r *http.Request) {
     id, email := getIDAndEmail(r)
@@ -79,10 +80,33 @@ func WorkoutsDefault(w http.ResponseWriter, r * http.Request) {
 func WorkoutsAdd(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r);
     printHandlerLog(id, email, r );
-    data := mux.Vars(r)["json"]
-    models.AddWorkout(id, data);
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    models.AddWorkout(id, string(body[:]));
+    SendHTTPStatusJSON(w, http.StatusOK)
 }
 
+func WorkoutsRemove(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r);
+    printHandlerLog(id, email, r );
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    models.RemoveWorkout(id, string(body[:]))
+    SendHTTPStatusJSON(w, http.StatusOK)
+
+}
+
+/*
+*   SCHEDULES
+*/
 
 func Schedules(w http.ResponseWriter, r *http.Request) {
 	id, email := getIDAndEmail(r)
@@ -100,6 +124,10 @@ func SchedulesDefault(w http.ResponseWriter, r * http.Request) {
     json.NewEncoder(w).Encode(schedules)
 
 }
+
+/*
+*   MISC
+*/
 
 func UserInfo(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r)

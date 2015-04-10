@@ -14,6 +14,8 @@ type scheduleResult struct {
 }
 
 const getSchedulesQuery = "SELECT name, workout, day FROM schedules WHERE userid = ?"
+const addSchedulesQuery = "INSERT INTO schedules (userid, name, workout, day) VALUES (?, ?, ?, ?)"
+const removeSchedulesQuery = "DELETE FROM schedules WHERE userid=? AND name=?"
 
 func GetSchedules(id string) []*scheduleResult {
 
