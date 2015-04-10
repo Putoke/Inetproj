@@ -29,7 +29,7 @@ var routes = []Route{
 
     Route{
         "schedulesAdd",
-        "GET",
+        "POST",
         "/exercises/add",
         Use(ExercisesAdd, RequireLogin),
     },
