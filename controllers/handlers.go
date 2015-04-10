@@ -33,15 +33,11 @@ func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r);
     printHandlerLog(id, email, r );
 
-
     body, err := ioutil.ReadAll(r.Body)
     if err != nil {
         log.Fatal(err)
     }
 
-    /*
-    data := mux.Vars(r)["json"]
-    */
     models.AddExercise(id,string( body[:]))
     SendHTTPStatusJSON(w, http.StatusOK)
 }
@@ -49,8 +45,14 @@ func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
 func ExerciseRemove(w http.ResponseWriter, r * http.Request) {
     id, email := getIDAndEmail(r);
     printHandlerLog(id, email, r );
-    data := mux.Vars(r)["json"]
-    models.RemoveExercise(id, data)
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    models.RemoveExercise(id, string(body[:]))
+    SendHTTPStatusJSON(w, http.StatusOK)
 
 }
 
