@@ -58,7 +58,7 @@ var routes = []Route{
     Route {
         "workoutsAdd",
         "POST",
-        "/workouts/add/{json}",
+        "/workouts/add",
         Use(WorkoutsAdd, RequireLogin),
     },
 
