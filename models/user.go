@@ -2,6 +2,8 @@ package models
 
 import (
 	"log"
+    "encoding/json"
+    "Inetproj/util"
 )
 
 type User struct {
@@ -15,16 +17,20 @@ type User struct {
 const registerUserQuery = "INSERT INTO users (name, lastname, email, password) values (?, ?, ?, ?);"
 const getUserQuery = "SELECT id, name, lastname, email, password FROM users where email = ?"
 
-func RegisterUser(name, lastname, email, password string) bool {
+func RegisterUser(data string) bool {
 
 	stmt, err := db.Prepare(registerUserQuery)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = stmt.Query(name, lastname, email, password)
+
+    if err != nil {
+        log.Fatal(err)
+    }
+    var ex User
+    err = json.Unmarshal([]byte(data), &ex)
+
+	_, err = stmt.Exec(ex.Name, ex.Lastname, ex.Email, util.StringToMD5(ex.Password))
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return err == nil

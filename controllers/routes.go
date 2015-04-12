@@ -106,8 +106,9 @@ var routes = []Route{
 
 	Route{
 		"registeruser",
-		"GET",
-		"/user/register/{name}/{lastname}/{email}/{password}",
+		"POST",
+		//"/user/register/{name}/{lastname}/{email}/{password}",
+        "/register",
 		RegisterUser,
 	},
 

@@ -3,9 +3,6 @@ package controllers
 import (
 	"Inetproj/config"
 	"Inetproj/models"
-	"bytes"
-	"crypto/md5"
-	"encoding/hex"
 	"encoding/json"
 	"github.com/dchest/authcookie"
 	ctx "github.com/gorilla/context"
@@ -16,6 +13,7 @@ import (
 	"net/http"
 	"time"
     "io/ioutil"
+    "Inetproj/util"
 )
 
 var Store = sessions.NewCookieStore(
@@ -39,7 +37,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
         log.Println("Login failed from " + r.RemoteAddr + " as email=" + email + " (" + status + ")")
         SendHTTPStatusJSON(w, http.StatusForbidden)
     } else {
-        if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
+        if util.EqualHashes([]byte(util.StringToMD5(password)), []byte(user.Password)) {
             duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
             expiration := time.Now().Add(duration)
 
@@ -84,7 +82,7 @@ func LoginPost( w http.ResponseWriter, r * http.Request) {
         log.Println("Login failed from " + r.RemoteAddr + " as email=" + email + " (" + status + ")")
         SendHTTPStatusJSON(w, http.StatusForbidden)
     } else {
-        if equalHashes([]byte(stringToMD5(password)), []byte(user.Password)) {
+        if util.EqualHashes([]byte(util.StringToMD5(password)), []byte(user.Password)) {
             duration := time.Duration(config.Values.SessionExpirationTimeMinutes) * time.Minute
             expiration := time.Now().Add(duration)
 
@@ -106,32 +104,29 @@ func LoginPost( w http.ResponseWriter, r * http.Request) {
     }
 
 
-
 }
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	name := vars["name"]
-	lastname := vars["lastname"]
-	email := vars["email"]
-	pwhash := stringToMD5(vars["password"])
 
-	success := models.RegisterUser(name, lastname, email, pwhash)
-	if success {
-		log.Println("New user registered (" + name + ", " + lastname + ", " + email + ")")
-		w.Write([]byte("User registered"))
-	}
+    id, email := getIDAndEmail(r)
+    printHandlerLog(id, email, r)
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    success := models.RegisterUser(string(body[:]))
+
+    if success {
+        SendHTTPStatusJSON(w, http.StatusOK)
+    } else {
+        SendHTTPStatusJSON(w, http.StatusForbidden)
+    }
+
 }
 
-func stringToMD5(s string) string {
-	hasher := md5.New()
-	hasher.Write([]byte(s))
-	return hex.EncodeToString(hasher.Sum(nil))
-}
 
-func equalHashes(hash1 []byte, hash2 []byte) bool {
-	return bytes.Compare(hash1[:], hash2[:]) == 0
-}
 
 func SendStatusJSON(w http.ResponseWriter, status string, code int) {
 	s := &Status{Status: status, Code: code}
