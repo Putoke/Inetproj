@@ -3,151 +3,163 @@ package controllers
 import (
 	"Inetproj/models"
 	"encoding/json"
-    ctx "github.com/gorilla/context"
+	ctx "github.com/gorilla/context"
+	"io/ioutil"
 	"log"
 	"net/http"
-    "runtime"
-    "io/ioutil"
+	"runtime"
 )
 
 /*
 *   EXERCISES
-*/
+ */
 
 func Exercises(w http.ResponseWriter, r *http.Request) {
-    id, email := getIDAndEmail(r)
+	id, email := getIDAndEmail(r)
 
-    printHandlerLog(id, email, r)
-    exercises := models.GetExercises(id)
-    json.NewEncoder(w).Encode(exercises)
+	printHandlerLog(id, email, r)
+	exercises := models.GetExercises(id)
+	json.NewEncoder(w).Encode(exercises)
 }
 
-func ExercisesDefault(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r)
+func ExercisesDefault(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
 
-    printHandlerLog(id, email, r)
-    exercises := models.GetExercises("0")
-    json.NewEncoder(w).Encode(exercises)
+	printHandlerLog(id, email, r)
+	exercises := models.GetExercises("0")
+	json.NewEncoder(w).Encode(exercises)
 }
 
-func ExercisesAdd(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r);
-    printHandlerLog(id, email, r );
+func ExercisesAdd(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
+	printHandlerLog(id, email, r)
 
-    body, err := ioutil.ReadAll(r.Body)
-    if err != nil {
-        log.Fatal(err)
-    }
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    models.AddExercise(id,string( body[:]))
-    SendHTTPStatusJSON(w, http.StatusOK)
+	models.AddExercise(id, string(body[:]))
+	SendHTTPStatusJSON(w, http.StatusOK)
 }
 
-func ExerciseRemove(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r);
-    printHandlerLog(id, email, r );
+func ExerciseRemove(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
+	printHandlerLog(id, email, r)
 
-    body, err := ioutil.ReadAll(r.Body)
-    if err != nil {
-        log.Fatal(err)
-    }
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    models.RemoveExercise(id, string(body[:]))
-    SendHTTPStatusJSON(w, http.StatusOK)
+	models.RemoveExercise(id, string(body[:]))
+	SendHTTPStatusJSON(w, http.StatusOK)
 
 }
 
 /*
 *   WORKOUTS
-*/
+ */
 
 func Workouts(w http.ResponseWriter, r *http.Request) {
-    id, email := getIDAndEmail(r)
+	id, email := getIDAndEmail(r)
 
-    printHandlerLog(id, email, r)
-    workouts := models.GetWorkouts(id)
-    json.NewEncoder(w).Encode(workouts)
+	printHandlerLog(id, email, r)
+	workouts := models.GetWorkouts(id)
+	json.NewEncoder(w).Encode(workouts)
 }
 
-func WorkoutsDefault(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r)
+func WorkoutsDefault(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
 
-    printHandlerLog(id, email, r)
-    workouts := models.GetWorkouts("0")
-    json.NewEncoder(w).Encode(workouts)
+	printHandlerLog(id, email, r)
+	workouts := models.GetWorkouts("0")
+	json.NewEncoder(w).Encode(workouts)
 }
 
-func WorkoutsAdd(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r);
-    printHandlerLog(id, email, r );
+func WorkoutsAdd(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
+	printHandlerLog(id, email, r)
 
-    body, err := ioutil.ReadAll(r.Body)
-    if err != nil {
-        log.Fatal(err)
-    }
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    models.AddWorkout(id, string(body[:]));
-    SendHTTPStatusJSON(w, http.StatusOK)
+	models.AddWorkout(id, string(body[:]))
+	SendHTTPStatusJSON(w, http.StatusOK)
 }
 
-func WorkoutsRemove(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r);
-    printHandlerLog(id, email, r );
+func WorkoutsRemove(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
+	printHandlerLog(id, email, r)
 
-    body, err := ioutil.ReadAll(r.Body)
-    if err != nil {
-        log.Fatal(err)
-    }
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    models.RemoveWorkout(id, string(body[:]))
-    SendHTTPStatusJSON(w, http.StatusOK)
+	models.RemoveWorkout(id, string(body[:]))
+	SendHTTPStatusJSON(w, http.StatusOK)
 
 }
 
 /*
 *   SCHEDULES
-*/
+ */
 
 func Schedules(w http.ResponseWriter, r *http.Request) {
 	id, email := getIDAndEmail(r)
 
-    printHandlerLog(id, email, r)
+	printHandlerLog(id, email, r)
 	schedules := models.GetSchedules(id)
 	json.NewEncoder(w).Encode(schedules)
 }
 
-func SchedulesDefault(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r)
+func SchedulesDefault(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
 
-    printHandlerLog(id, email, r)
-    schedules := models.GetSchedules("0")
-    json.NewEncoder(w).Encode(schedules)
+	printHandlerLog(id, email, r)
+	schedules := models.GetSchedules("0")
+	json.NewEncoder(w).Encode(schedules)
 
+}
+
+func SchedulesAdd(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
+	printHandlerLog(id, email, r)
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	models.AddSchedule(id, string(body[:]))
+	SendHTTPStatusJSON(w, http.StatusOK)
 }
 
 /*
 *   MISC
-*/
+ */
 
-func UserInfo(w http.ResponseWriter, r * http.Request) {
-    id, email := getIDAndEmail(r)
-    user := models.GetUserByEmail(email)
+func UserInfo(w http.ResponseWriter, r *http.Request) {
+	id, email := getIDAndEmail(r)
+	user := models.GetUserByEmail(email)
 
-    printHandlerLog(id, email, r)
-    json.NewEncoder(w).Encode(user)
+	printHandlerLog(id, email, r)
+	json.NewEncoder(w).Encode(user)
 }
 
-func getIDAndEmail(r * http.Request) (id, email string) {
-    id = ctx.Get(r, "id").(string)
-    email = ctx.Get(r, "email").(string)
-    return id, email
+func getIDAndEmail(r *http.Request) (id, email string) {
+	id = ctx.Get(r, "id").(string)
+	email = ctx.Get(r, "email").(string)
+	return id, email
 }
 
-func printHandlerLog(id string, email string, r * http.Request) {
+func printHandlerLog(id string, email string, r *http.Request) {
 
-    pc, _, _, _ := runtime.Caller(1)
-    fname := runtime.FuncForPC(pc).Name()
-    //fname := runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
-    log.Println(fname + " called by email=" + email + ", id=" + id + ", client=" + r.RemoteAddr)
+	pc, _, _, _ := runtime.Caller(1)
+	fname := runtime.FuncForPC(pc).Name()
+	//fname := runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
+	log.Println(fname + " called by email=" + email + ", id=" + id + ", client=" + r.RemoteAddr)
 }
-

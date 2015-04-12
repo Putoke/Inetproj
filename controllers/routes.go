@@ -13,12 +13,12 @@ type Route struct {
 
 var routes = []Route{
 
-    Route{
-        "exercises",
-        "GET",
-        "/exercises",
-        Use(Exercises, RequireLogin),
-    },
+	Route{
+		"exercises",
+		"GET",
+		"/exercises",
+		Use(Exercises, RequireLogin),
+	},
 
 	Route{
 		"exercisesDefault",
@@ -27,47 +27,47 @@ var routes = []Route{
 		Use(ExercisesDefault, RequireLogin),
 	},
 
-    Route{
-        "exercisesAdd",
-        "POST",
-        "/exercises/add",
-        Use(ExercisesAdd, RequireLogin),
-    },
+	Route{
+		"exercisesAdd",
+		"POST",
+		"/exercises/add",
+		Use(ExercisesAdd, RequireLogin),
+	},
 
-    Route{
-        "exercisesAdd",
-        "POST",
-        "/exercises/remove",
-        Use(ExerciseRemove, RequireLogin),
-    },
+	Route{
+		"exercisesAdd",
+		"POST",
+		"/exercises/remove",
+		Use(ExerciseRemove, RequireLogin),
+	},
 
-    Route{
-        "workouts",
-        "GET",
-        "/workouts",
-        Use(Workouts, RequireLogin),
-    },
+	Route{
+		"workouts",
+		"GET",
+		"/workouts",
+		Use(Workouts, RequireLogin),
+	},
 
-    Route {
-        "workoutsDefault",
-        "GET",
-        "/workouts/default",
-        Use(WorkoutsDefault, RequireLogin),
-    },
+	Route{
+		"workoutsDefault",
+		"GET",
+		"/workouts/default",
+		Use(WorkoutsDefault, RequireLogin),
+	},
 
-    Route {
-        "workoutsAdd",
-        "POST",
-        "/workouts/add",
-        Use(WorkoutsAdd, RequireLogin),
-    },
+	Route{
+		"workoutsAdd",
+		"POST",
+		"/workouts/add",
+		Use(WorkoutsAdd, RequireLogin),
+	},
 
-    Route {
-        "workoutsRemove",
-        "POST",
-        "/workouts/remove",
-        Use(WorkoutsRemove, RequireLogin),
-    },
+	Route{
+		"workoutsRemove",
+		"POST",
+		"/workouts/remove",
+		Use(WorkoutsRemove, RequireLogin),
+	},
 
 	Route{
 		"schedules",
@@ -76,21 +76,26 @@ var routes = []Route{
 		Use(Schedules, RequireLogin),
 	},
 
-    Route{
-        "schedulesDefault",
-        "GET",
-        "/schedules/default",
-        Use(SchedulesDefault, RequireLogin),
-    },
+	Route{
+		"schedulesAdd",
+		"POST",
+		"/schedules/add",
+		Use(SchedulesAdd, RequireLogin),
+	},
 
+	Route{
+		"schedulesDefault",
+		"GET",
+		"/schedules/default",
+		Use(SchedulesDefault, RequireLogin),
+	},
 
-
-    Route{
-        "userinfo",
-        "GET",
-        "/user/info",
-        Use(UserInfo, RequireLogin),
-    },
+	Route{
+		"userinfo",
+		"GET",
+		"/user/info",
+		Use(UserInfo, RequireLogin),
+	},
 
 	Route{
 		"registeruser",
@@ -106,12 +111,10 @@ var routes = []Route{
 		Login,
 	},
 
-    Route {
-        "login",
-        "POST",
-        "/login",
-        LoginPost,
-    },
+	Route{
+		"login",
+		"POST",
+		"/login",
+		LoginPost,
+	},
 }
-
-
