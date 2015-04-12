@@ -1,20 +1,20 @@
 package models
 
 import (
-    "log"
-    "encoding/json"
+	"encoding/json"
+	"log"
 )
 
 type Workout struct {
-    Name string `json:"name,omitempty"`
+	Name     string `json:"name,omitempty"`
 	Exercise string `json:"exercise"`
 	Sets     string `json:"sets"`
 	Reps     string `json:"reps"`
 }
 
 type workoutResult struct {
-    Name string `json:"name"`
-    Exercises []*Workout `json:"exercises"`
+	Name      string     `json:"name"`
+	Exercises []*Workout `json:"exercises"`
 }
 
 const getWorkoutsQuery = "SELECT name, exercise, sets, reps FROM workouts WHERE userid = ?"
@@ -29,7 +29,7 @@ func GetWorkouts(id string) []*workoutResult {
 	}
 	rows, err := stmt.Query(id)
 
-    m := make(map[string][]*Workout)
+	m := make(map[string][]*Workout)
 
 	var name, workout, sets, reps string
 
@@ -39,42 +39,41 @@ func GetWorkouts(id string) []*workoutResult {
 			log.Fatal(err)
 		}
 
-        m[name] = append(m[name], &Workout{"", workout, sets, reps})
+		m[name] = append(m[name], &Workout{"", workout, sets, reps})
 
 	}
 
-    result := make([]*workoutResult,0, 10)
+	result := make([]*workoutResult, 0, 10)
 
-    for k, _ := range m {
-        result = append(result, &workoutResult{k, m[k]})
-    }
+	for k, _ := range m {
+		result = append(result, &workoutResult{k, m[k]})
+	}
 
 	return result
 }
 
-
 func AddWorkout(id string, data string) {
-    stmt, err := db.Prepare(addWorkoutQuery);
-    if err != nil {
-        log.Fatal(err)
-    }
-    var ex Workout
-    err = json.Unmarshal([]byte(data), &ex)
+	stmt, err := db.Prepare(addWorkoutQuery)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var ex Workout
+	err = json.Unmarshal([]byte(data), &ex)
 
-    if len(ex.Name) > 0 && len(ex.Exercise) > 0 {
-        stmt.Exec(id, ex.Name, ex.Exercise, ex.Reps, ex.Sets)
-    }
+	if len(ex.Name) > 0 && len(ex.Exercise) > 0 {
+		stmt.Exec(id, ex.Name, ex.Exercise, ex.Sets, ex.Reps)
+	}
 }
 
 func RemoveWorkout(id string, data string) {
 
-    stmt, err := db.Prepare(removeWorkoutQuery);
-    if err != nil {
-        log.Fatal(err)
-    }
+	stmt, err := db.Prepare(removeWorkoutQuery)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    var ex Workout
-    err = json.Unmarshal([]byte(data), &ex)
+	var ex Workout
+	err = json.Unmarshal([]byte(data), &ex)
 
-    stmt.Exec(id, ex.Name)
+	stmt.Exec(id, ex.Name)
 }
