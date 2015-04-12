@@ -108,8 +108,8 @@ func LoginPost( w http.ResponseWriter, r * http.Request) {
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
-    id, email := getIDAndEmail(r)
-    printHandlerLog(id, email, r)
+    //id, email := getIDAndEmail(r)
+    //printHandlerLog(id, email, r)
 
     body, err := ioutil.ReadAll(r.Body)
     if err != nil {
@@ -120,8 +120,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
     if success {
         SendHTTPStatusJSON(w, http.StatusOK)
+        log.Println("User registered successful")
     } else {
         SendHTTPStatusJSON(w, http.StatusForbidden)
+        log.Println("User registered failed")
     }
 
 }
