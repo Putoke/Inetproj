@@ -11,21 +11,21 @@ insert into exercises (userid, name, musclegroup) values (1, "Pushups", "Chest")
 insert into exercises (userid, name, musclegroup) values (1, "Situps", "Abdominals");
 
 #Default workouts
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass", "Benchpress", 3, 10);
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass", "Legpress", 3, 10);
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass", "Deadlift", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 1", "Benchpress", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 1", "Legpress", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 1", "Deadlift", 3, 10);
 
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 2", "Marklyft", 3, 10);
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 2", "Pushups", 3, 15);
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 2", "Situps", 3, 15);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Marklyft", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Pushups", 3, 15);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Situps", 3, 15);
 
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 3", "Situps", 3, 15);
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 3", "Deadlift", 3, 10);
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Exempelpass 3", "Legpress", 3, 15);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 3", "Situps", 3, 15);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 3", "Deadlift", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 3", "Legpress", 3, 15);
 
 #Default schedule
-insert into schedules (userid, name, workout, day) values (1, "Schema 1", "Workout", "Monday");
+insert into schedules (userid, name, workout, day) values (1, "Schema 1", "Workout 1", "Monday");
 insert into schedules (userid, name, workout, day) values (1, "Schema 1", "Workout 2", "Tuesday");
 insert into schedules (userid, name, workout, day) values (1, "Schema 2", "Workout 3", "Wednesday");
-insert into schedules (userid, name, workout, day) values (1, "Schema 2", "Workout", "Friday");
+insert into schedules (userid, name, workout, day) values (1, "Schema 2", "Workout 1", "Friday");
 
