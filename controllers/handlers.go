@@ -164,8 +164,14 @@ func UserInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func getIDAndEmail(r *http.Request) (id, email string) {
-	id = ctx.Get(r, "id").(string)
-	email = ctx.Get(r, "email").(string)
+
+    if r != nil {
+        id = ctx.Get(r, "id").(string)
+        email = ctx.Get(r, "email").(string)
+    } else {
+        log.Println("getIDAndEmail - nil session")
+    }
+
 	return id, email
 }
 

@@ -17,6 +17,18 @@ type User struct {
 const registerUserQuery = "INSERT INTO users (name, lastname, email, password) values (?, ?, ?, ?);"
 const getUserQuery = "SELECT id, name, lastname, email, password FROM users where email = ?"
 
+func GetUserByEmail(email string) * User {
+    stmt, err := db.Prepare(getUserQuery)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    user := &User{}
+    err = stmt.QueryRow(email).Scan(&user.Id, &user.Name, &user.Lastname, &user.Email, &user.Password)
+
+    return user
+}
+
 func RegisterUser(data string) bool {
 
 	stmt, err := db.Prepare(registerUserQuery)
@@ -25,7 +37,7 @@ func RegisterUser(data string) bool {
         log.Fatal(err)
     }
     var ex User
-    err = json.Unmarshal([]byte(data), &ex)
+    _ = json.Unmarshal([]byte(data), &ex)
 
 	_, err = stmt.Exec(ex.Name, ex.Lastname, ex.Email, util.StringToMD5(ex.Password))
 
@@ -36,15 +48,4 @@ func RegisterUser(data string) bool {
 	return err == nil
 }
 
-func GetUserByEmail(email string) * User {
-    stmt, err := db.Prepare(getUserQuery)
-    if err != nil {
-        log.Fatal(err)
-    }
 
-
-    user := &User{}
-    err = stmt.QueryRow(email).Scan(&user.Id, &user.Name, &user.Lastname, &user.Email, &user.Password)
-
-    return user
-}
