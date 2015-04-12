@@ -77,18 +77,25 @@ var routes = []Route{
 	},
 
 	Route{
-		"schedulesAdd",
-		"POST",
-		"/schedules/add",
-		Use(SchedulesAdd, RequireLogin),
-	},
-
-	Route{
 		"schedulesDefault",
 		"GET",
 		"/schedules/default",
 		Use(SchedulesDefault, RequireLogin),
 	},
+
+    Route{
+        "schedulesAdd",
+        "POST",
+        "/schedules/add",
+        Use(SchedulesAdd, RequireLogin),
+    },
+
+    Route{
+        "schedulesRemove",
+        "POST",
+        "/schedules/remove",
+        Use(SchedulesRemove, RequireLogin),
+    },
 
 	Route{
 		"userinfo",

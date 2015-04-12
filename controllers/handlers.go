@@ -138,6 +138,19 @@ func SchedulesAdd(w http.ResponseWriter, r *http.Request) {
 	SendHTTPStatusJSON(w, http.StatusOK)
 }
 
+func SchedulesRemove(w http.ResponseWriter, r * http.Request) {
+    id, email := getIDAndEmail(r)
+    printHandlerLog(id, email, r)
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    models.RemoveSchedule(id, string(body[:]))
+    SendHTTPStatusJSON(w, http.StatusOK)
+}
+
 /*
 *   MISC
  */

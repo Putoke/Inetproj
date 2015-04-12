@@ -61,3 +61,15 @@ func AddSchedule(id string, data string) {
 		stmt.Exec(id, ex.Name, ex.Workout, ex.Day)
 	}
 }
+
+func RemoveSchedule(id string, data string) {
+    stmt, err := db.Prepare(removeSchedulesQuery);
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    var ex Schedule
+    err = json.Unmarshal([]byte(data), &ex)
+
+    stmt.Exec(id, ex.Name)
+}
