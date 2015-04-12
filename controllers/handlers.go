@@ -169,7 +169,7 @@ func getIDAndEmail(r *http.Request) (id, email string) {
         id = ctx.Get(r, "id").(string)
         email = ctx.Get(r, "email").(string)
     } else {
-        log.Println("getIDAndEmail - nil session")
+        log.Println("getIDAndEmail - nil request")
     }
 
 	return id, email

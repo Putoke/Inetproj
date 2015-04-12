@@ -27,6 +27,7 @@ type Status struct {
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
+
 	email := mux.Vars(r)["email"]
 	password := mux.Vars(r)["password"]
 
