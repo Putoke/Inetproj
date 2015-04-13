@@ -28,6 +28,7 @@ func ExercisesDefault(w http.ResponseWriter, r *http.Request) {
 	printHandlerLog(id, email, r)
 	exercises := models.GetExercises("0")
 	json.NewEncoder(w).Encode(exercises)
+
 }
 
 func ExercisesAdd(w http.ResponseWriter, r *http.Request) {
