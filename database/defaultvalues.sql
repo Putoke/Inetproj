@@ -15,7 +15,7 @@ insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 1"
 insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 1", "Legpress", 3, 10);
 insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 1", "Deadlift", 3, 10);
 
-insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Marklyft", 3, 10);
+insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Deadlift", 3, 10);
 insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Pushups", 3, 15);
 insert into workouts (userid, name, exercise, sets, reps) values (1, "Workout 2", "Situps", 3, 15);
 
