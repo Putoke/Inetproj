@@ -5,7 +5,7 @@ insert into users (id, name, lastname, email, password) values (1, "Mr", "Workou
 
 #Default excersises
 insert into exercises (userid, name, musclegroup) values (1, "Bench press", "Chest");
-insert into exercises (userid, name, musclegroup) values (1, "Legp ress", "Legs");
+insert into exercises (userid, name, musclegroup) values (1, "Leg press", "Legs");
 insert into exercises (userid, name, musclegroup) values (1, "Deadlift", "Back");
 insert into exercises (userid, name, musclegroup) values (1, "Pushups", "Chest");
 insert into exercises (userid, name, musclegroup) values (1, "Situps", "Abdominals");
